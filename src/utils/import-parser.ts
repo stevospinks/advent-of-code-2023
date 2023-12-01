@@ -3,7 +3,7 @@ export class ImportParser {
     const result: number[][] = [];
 
     let group: number[] = [];
-    input.split(/\r?\n/).forEach((n) => {
+    ImportParser.ToStringArray(input).forEach((n) => {
       if (n === '') {
         result.push(group);
         group = [];
@@ -14,5 +14,9 @@ export class ImportParser {
     });
 
     return result;
+  }
+
+  public static ToStringArray(input: string): string[] {
+    return input.split(/\r?\n/);
   }
 }
