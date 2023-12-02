@@ -8,8 +8,8 @@ interface Game {
 
 interface Round {
   red: number;
-  blue: number;
   green: number;
+  blue: number;
 }
 
 class Day2 extends Day {
@@ -21,9 +21,8 @@ class Day2 extends Day {
     super(2);
   }
 
-  solveForPartOne(input: string): string {
-    const gameData = ImportParser.ToStringArray(input);
-    const games: Game[] = gameData.map((g) => {
+  parseInput(gameData: string[]): Game[] {
+    return gameData.map((g) => {
       const idSplit = g.split(': ');
       const id = parseInt(idSplit[0].split(' ')[1]);
 
@@ -32,7 +31,6 @@ class Day2 extends Day {
         const round: Round = { red: 0, green: 0, blue: 0 };
 
         const cubeGroupData = r.split(', ');
-
         for (let i = 0; i < cubeGroupData.length; i++) {
           const cubeGroup = cubeGroupData[i].split(' ');
           switch (cubeGroup[1]) {
@@ -55,6 +53,11 @@ class Day2 extends Day {
 
       return { id: id, rounds: rounds };
     });
+  }
+
+  solveForPartOne(input: string): string {
+    const gameData = ImportParser.ToStringArray(input);
+    const games: Game[] = this.parseInput(gameData);
 
     const possibleGames = games.filter((g) =>
       g.rounds.every(
@@ -73,7 +76,27 @@ class Day2 extends Day {
   }
 
   solveForPartTwo(input: string): string {
-    return input;
+    const gameData = ImportParser.ToStringArray(input);
+    const games: Game[] = this.parseInput(gameData);
+
+    const maxRounds: Round[] = games.map((g) => {
+      return g.rounds.reduce(
+        (maxRound, r) => {
+          maxRound.red = maxRound.red < r.red ? r.red : maxRound.red;
+          maxRound.green = maxRound.green < r.green ? r.green : maxRound.green;
+          maxRound.blue = maxRound.blue < r.blue ? r.blue : maxRound.blue;
+          return maxRound;
+        },
+        { red: 0, green: 0, blue: 0 },
+      );
+    });
+
+    const powerSum = maxRounds.reduce((acc, r) => {
+      const power = r.red * r.green * r.blue;
+      return acc + power;
+    }, 0);
+
+    return powerSum.toString();
   }
 }
 
