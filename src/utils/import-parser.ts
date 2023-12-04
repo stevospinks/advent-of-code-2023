@@ -1,17 +1,36 @@
 export class ImportParser {
-  public static ToNumberArrays(input: string): number[][] {
-    const result: number[][] = [];
+  public static ToGroupedNumberArrays(
+    input: string,
+    numberSeparator: string,
+    groupSeparator: string,
+    ignoreEverythingBeforePerLine?: string,
+  ): number[][][] {
+    const result: number[][][] = ImportParser.ToStringArray(input).reduce(
+      (acc: number[][][], line: string) => {
+        if (ignoreEverythingBeforePerLine) {
+          line = line.split(ignoreEverythingBeforePerLine)[1];
+        }
 
-    let group: number[] = [];
-    ImportParser.ToStringArray(input).forEach((n) => {
-      if (n === '') {
-        result.push(group);
-        group = [];
-        return;
-      }
+        const lineGroups = line.split(groupSeparator);
 
-      group.push(parseInt(n));
-    });
+        const parsedGroups: number[][] = lineGroups.reduce(
+          (groupAcc: number[][], group: string) => {
+            const parsedGroup: number[] = group
+              .split(numberSeparator)
+              .filter((n) => n !== undefined && n !== null && n !== '')
+              .map((n) => parseInt(n));
+
+            groupAcc.push(parsedGroup);
+            return groupAcc;
+          },
+          [],
+        );
+
+        acc.push(parsedGroups);
+        return acc;
+      },
+      [],
+    );
 
     return result;
   }
