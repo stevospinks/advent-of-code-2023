@@ -27,7 +27,27 @@ class Day4 extends Day {
   }
 
   solveForPartTwo(input: string): string {
-    return input;
+    const scratchcards = ImportParser.ToGroupedNumberArrays(input, ' ', '|', ':');
+
+    const duplicatedScratchcardCounts = scratchcards.reduce(
+      (acc: number[], scratchcard: number[][], index) => {
+        const winningNumbers = scratchcard[0];
+        const ourNumbers = scratchcard[1];
+        const copiesOfThisCard = acc[index];
+
+        let ourWinningNumbersCount = ourNumbers.filter((n) => winningNumbers.includes(n)).length;
+        while (ourWinningNumbersCount > 0) {
+          acc[index + ourWinningNumbersCount] += 1 * copiesOfThisCard;
+          ourWinningNumbersCount--;
+        }
+
+        return acc;
+      },
+      new Array(scratchcards.length).fill(1),
+    );
+
+    const result = duplicatedScratchcardCounts.reduce((acc, total) => (acc += total), 0);
+    return result.toString();
   }
 }
 
