@@ -39,7 +39,7 @@ describe('On Day 5', () => {
     expect(day5.solveForPartOne(example)).toBe('35');
   });
 
-  xit(`part 2 solves for the example input`, () => {
-    expect(day5.solveForPartTwo(example)).toBe('hello');
+  it(`part 2 solves for the example input`, () => {
+    expect(day5.solveForPartTwo(example)).toBe('46');
   });
 });
