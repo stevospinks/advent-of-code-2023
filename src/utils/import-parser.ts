@@ -39,6 +39,10 @@ export class ImportParser {
     return input.split(/\r?\n/);
   }
 
+  public static ToDataBlock(input: string): string[] {
+    return input.split(/\r?\n\r?\n/);
+  }
+
   public static To2dMatrix(input: string): string[][] {
     const result = ImportParser.ToStringArray(input).reduce((acc: string[][], line) => {
       const charArray = line.split('');
