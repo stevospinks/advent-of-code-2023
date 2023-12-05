@@ -18,18 +18,22 @@ const days: Day[] = [
 ];
 
 async function runDay(dayId: number) {
+  console.time('runtime');
   const resultPart1 = await days[dayId].partOne();
-  console.log('Part 1 result:\n');
-  console.log(resultPart1);
+  console.log('Part 1 result:', resultPart1);
+  console.timeEnd('runtime');
 
-  console.log('\n');
+  console.log('');
 
+  console.time('runtime');
   const resultPart2 = await days[dayId].partTwo();
-  console.log('Part 2 result:\n');
-  console.log(resultPart2);
+  console.log('Part 2 result:', resultPart2);
+  console.timeEnd('runtime');
+
+  console.log('');
 }
 
-console.log('\n\n🎄 ADVENT OF CODE 2023 🎄\n');
+console.log('🎄 ADVENT OF CODE 2023 🎄\n');
 const params = process.argv.splice(2);
 if (params.length) {
   runDay(parseInt(params[0], 10));
