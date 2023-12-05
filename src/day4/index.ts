@@ -1,5 +1,5 @@
 import { Day } from '../day';
-import { StringParser } from '../utils/import-parser';
+import { StringParser } from '../utils/string-parser';
 
 class Day4 extends Day {
   constructor() {

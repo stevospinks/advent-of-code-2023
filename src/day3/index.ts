@@ -1,5 +1,5 @@
 import { Day } from '../day';
-import { StringParser } from '../utils/import-parser';
+import { StringParser } from '../utils/string-parser';
 
 class Day3 extends Day {
   private readonly symbolRegEx = /[^a-zA-Z0-9.]/;
