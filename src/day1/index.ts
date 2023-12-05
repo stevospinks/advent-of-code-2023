@@ -1,5 +1,5 @@
 import { Day } from '../day';
-import { ImportParser } from '../utils/import-parser';
+import { StringParser } from '../utils/import-parser';
 
 class Day1 extends Day {
   constructor() {
@@ -7,7 +7,7 @@ class Day1 extends Day {
   }
 
   solveForPartOne(input: string): string {
-    const lines = ImportParser.ToStringArray(input);
+    const lines = StringParser.ToStringArray(input);
 
     const result = lines.reduce((acc: number, line: string) => {
       const allNumbers = line.replace(/[^0-9]+/g, '');
@@ -30,7 +30,7 @@ class Day1 extends Day {
       { number: '8', text: 'eight' },
       { number: '9', text: 'nine' },
     ];
-    const lines = ImportParser.ToStringArray(input);
+    const lines = StringParser.ToStringArray(input);
 
     const result = lines.reduce((acc: number, line: string) => {
       let firstAndLast = '';

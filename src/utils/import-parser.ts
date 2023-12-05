@@ -1,11 +1,11 @@
-export class ImportParser {
+export class StringParser {
   public static ToGroupedNumberArrays(
     input: string,
     numberSeparator: string,
     groupSeparator: string,
     ignoreEverythingBeforePerLine?: string,
   ): number[][][] {
-    const result: number[][][] = ImportParser.ToStringArray(input).reduce(
+    const result: number[][][] = StringParser.ToStringArray(input).reduce(
       (acc: number[][][], line: string) => {
         if (ignoreEverythingBeforePerLine) {
           line = line.split(ignoreEverythingBeforePerLine)[1];
@@ -44,7 +44,7 @@ export class ImportParser {
   }
 
   public static To2dMatrix(input: string): string[][] {
-    const result = ImportParser.ToStringArray(input).reduce((acc: string[][], line) => {
+    const result = StringParser.ToStringArray(input).reduce((acc: string[][], line) => {
       const charArray = line.split('');
       acc.push(charArray);
       return acc;

@@ -1,5 +1,5 @@
 import { Day } from '../day';
-import { ImportParser } from '../utils/import-parser';
+import { StringParser } from '../utils/import-parser';
 
 class Day4 extends Day {
   constructor() {
@@ -7,7 +7,7 @@ class Day4 extends Day {
   }
 
   solveForPartOne(input: string): string {
-    const scratchcards = ImportParser.ToGroupedNumberArrays(input, ' ', '|', ':');
+    const scratchcards = StringParser.ToGroupedNumberArrays(input, ' ', '|', ':');
 
     const winningNumberTotals = scratchcards.reduce((acc: number[], scratchcard: number[][]) => {
       const winningNumbers = scratchcard[0];
@@ -27,7 +27,7 @@ class Day4 extends Day {
   }
 
   solveForPartTwo(input: string): string {
-    const scratchcards = ImportParser.ToGroupedNumberArrays(input, ' ', '|', ':');
+    const scratchcards = StringParser.ToGroupedNumberArrays(input, ' ', '|', ':');
 
     const duplicatedScratchcardCounts = scratchcards.reduce(
       (acc: number[], scratchcard: number[][], index) => {

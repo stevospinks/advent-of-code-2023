@@ -1,5 +1,5 @@
 import { Day } from '../day';
-import { ImportParser } from '../utils/import-parser';
+import { StringParser } from '../utils/import-parser';
 
 interface Mapping {
   sourceStart: number;
@@ -13,7 +13,7 @@ class Day5 extends Day {
   }
 
   parseToMap(mapInput: string): Mapping[] {
-    const mapData: number[][] = ImportParser.ToStringArray(mapInput.split(':')[1])
+    const mapData: number[][] = StringParser.ToStringArray(mapInput.split(':')[1])
       .filter((l) => l !== '')
       .map((l) => l.split(' ').map((d) => parseInt(d)));
     const map = mapData.reduce((acc: Mapping[], mapping) => {
@@ -38,7 +38,7 @@ class Day5 extends Day {
   }
 
   solveForPartOne(input: string): string {
-    const data: string[] = ImportParser.ToDataBlock(input);
+    const data: string[] = StringParser.ToDataBlock(input);
     const seeds: number[] = data[0]
       .split(': ')[1]
       .split(' ')
@@ -72,7 +72,7 @@ class Day5 extends Day {
   }
 
   solveForPartTwo(input: string): string {
-    const data: string[] = ImportParser.ToDataBlock(input);
+    const data: string[] = StringParser.ToDataBlock(input);
     const seeds: number[] = data[0]
       .split(': ')[1]
       .split(' ')

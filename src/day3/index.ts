@@ -1,5 +1,5 @@
 import { Day } from '../day';
-import { ImportParser } from '../utils/import-parser';
+import { StringParser } from '../utils/import-parser';
 
 class Day3 extends Day {
   private readonly symbolRegEx = /[^a-zA-Z0-9.]/;
@@ -46,7 +46,7 @@ class Day3 extends Day {
   }
 
   solveForPartOne(input: string): string {
-    const data = ImportParser.To2dMatrix(input);
+    const data = StringParser.To2dMatrix(input);
     const partNumbers: number[] = [];
 
     for (let i = 0; i < data.length; i++) {
@@ -100,7 +100,7 @@ class Day3 extends Day {
     const digitRegEx = /[0-9]/;
     const separatedNumberRegEx = /^[0-9][^a-zA-Z0-9*][0-9]$/;
     const numbersAroundGearRegEx = /^[0-9]\*[0-9]$/;
-    const data = ImportParser.To2dMatrix(input);
+    const data = StringParser.To2dMatrix(input);
     const gearLocations: {
       col: number;
       partOneRow: number;

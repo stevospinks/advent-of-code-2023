@@ -1,5 +1,5 @@
 import { Day } from '../day';
-import { ImportParser } from '../utils/import-parser';
+import { StringParser } from '../utils/import-parser';
 
 interface Game {
   id: number;
@@ -56,7 +56,7 @@ class Day2 extends Day {
   }
 
   solveForPartOne(input: string): string {
-    const gameData = ImportParser.ToStringArray(input);
+    const gameData = StringParser.ToStringArray(input);
     const games: Game[] = this.parseInput(gameData);
 
     const possibleGames = games.filter((g) =>
@@ -76,7 +76,7 @@ class Day2 extends Day {
   }
 
   solveForPartTwo(input: string): string {
-    const gameData = ImportParser.ToStringArray(input);
+    const gameData = StringParser.ToStringArray(input);
     const games: Game[] = this.parseInput(gameData);
 
     const maxRounds: Round[] = games.map((g) => {
