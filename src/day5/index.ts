@@ -7,18 +7,23 @@ interface Mapping {
   sourceModifier: number;
 }
 
+interface SeedRange {
+  min: number;
+  max: number;
+}
+
 class Day5 extends Day {
   constructor() {
     super(5);
   }
 
-  parseToMap(mapInput: string): Mapping[] {
+  parseToMap(mapInput: string, inverse: boolean = false): Mapping[] {
     const mapData: number[][] = StringParser.ToStringArray(mapInput.split(':')[1])
       .filter((l) => l !== '')
       .map((l) => l.split(' ').map((d) => parseInt(d)));
     const map = mapData.reduce((acc: Mapping[], mapping) => {
-      const destStart = mapping[0];
-      const sourceStart = mapping[1];
+      const destStart = inverse ? mapping[1] : mapping[0];
+      const sourceStart = inverse ? mapping[0] : mapping[1];
       let count = mapping[2];
 
       acc.push({
@@ -52,17 +57,16 @@ class Day5 extends Day {
     const humidityToLocationMap = this.parseToMap(data[7]);
 
     const result = seeds.reduce((acc: number, seed: number) => {
-      let result = seed;
-      result = this.getMappedValue(seedToSoilMap, result);
-      result = this.getMappedValue(soilToFertilizerMap, result);
-      result = this.getMappedValue(fertilizerToWaterMap, result);
-      result = this.getMappedValue(waterToLightMap, result);
-      result = this.getMappedValue(lightToTemperatureMap, result);
-      result = this.getMappedValue(temperatureToHumidityMap, result);
-      result = this.getMappedValue(humidityToLocationMap, result);
+      const soil = this.getMappedValue(seedToSoilMap, seed);
+      const fertilizer = this.getMappedValue(soilToFertilizerMap, soil);
+      const water = this.getMappedValue(fertilizerToWaterMap, fertilizer);
+      const light = this.getMappedValue(waterToLightMap, water);
+      const temperature = this.getMappedValue(lightToTemperatureMap, light);
+      const humidity = this.getMappedValue(temperatureToHumidityMap, temperature);
+      const location = this.getMappedValue(humidityToLocationMap, humidity);
 
-      if (acc === -1 || result < acc) {
-        return result;
+      if (acc === -1 || location < acc) {
+        acc = location;
       }
 
       return acc;
@@ -73,43 +77,53 @@ class Day5 extends Day {
 
   solveForPartTwo(input: string): string {
     const data: string[] = StringParser.ToDataBlock(input);
-    const seeds: number[] = data[0]
+    const seedRanges: SeedRange[] = data[0]
       .split(': ')[1]
       .split(' ')
-      .map((d) => parseInt(d));
-    const seedToSoilMap = this.parseToMap(data[1]);
-    const soilToFertilizerMap = this.parseToMap(data[2]);
-    const fertilizerToWaterMap = this.parseToMap(data[3]);
-    const waterToLightMap = this.parseToMap(data[4]);
-    const lightToTemperatureMap = this.parseToMap(data[5]);
-    const temperatureToHumidityMap = this.parseToMap(data[6]);
-    const humidityToLocationMap = this.parseToMap(data[7]);
-
-    const result = seeds.reduce((acc: number, seed: number, index: number, arr: number[]) => {
-      if (index % 2 === 1) {
-        // Odd indexes specify a count, skip them
-        return acc;
-      }
-      let count = arr[index + 1];
-
-      while (count > 0) {
-        const soil = this.getMappedValue(seedToSoilMap, seed);
-        const fertilizer = this.getMappedValue(soilToFertilizerMap, soil);
-        const water = this.getMappedValue(fertilizerToWaterMap, fertilizer);
-        const light = this.getMappedValue(waterToLightMap, water);
-        const temperature = this.getMappedValue(lightToTemperatureMap, light);
-        const humidity = this.getMappedValue(temperatureToHumidityMap, temperature);
-        const location = this.getMappedValue(humidityToLocationMap, humidity);
-
-        if (acc === -1 || location < acc) {
-          acc = location;
+      .map((d) => parseInt(d))
+      .reduce((acc: SeedRange[], seed, index, arr) => {
+        if (index % 2 === 1) {
+          // Odd indexes specify a count, skip them
+          return acc;
         }
+        let count = arr[index + 1];
+        acc.push({ min: seed, max: seed + count });
+        return acc;
+      }, [])
+      .sort((s1, s2) => s1.min - s2.min);
 
-        seed++;
-        count--;
+    const soilToSeedMap = this.parseToMap(data[1], true);
+    const fertilizerToSoilMap = this.parseToMap(data[2], true);
+    const waterToFertilizerMap = this.parseToMap(data[3], true);
+    const lightToWaterMap = this.parseToMap(data[4], true);
+    const temperatureToLightMap = this.parseToMap(data[5], true);
+    const humidityToTemperatureMap = this.parseToMap(data[6], true);
+    const locationToHumidityMap = this.parseToMap(data[7], true);
+
+    let location = 0;
+    let result = -1;
+    while (result === -1) {
+      const humidity = this.getMappedValue(locationToHumidityMap, location);
+      const temperature = this.getMappedValue(humidityToTemperatureMap, humidity);
+      const light = this.getMappedValue(temperatureToLightMap, temperature);
+      const water = this.getMappedValue(lightToWaterMap, light);
+      const fertilizer = this.getMappedValue(waterToFertilizerMap, water);
+      const soil = this.getMappedValue(fertilizerToSoilMap, fertilizer);
+      const seed = this.getMappedValue(soilToSeedMap, soil);
+
+      for (let i = 0; i < seedRanges.length; i++) {
+        const seedRange = seedRanges[i];
+        if (seed < seedRange.min) {
+          continue;
+        }
+        if (seed < seedRange.max) {
+          result = location;
+          break;
+        }
       }
-      return acc;
-    }, -1);
+
+      location++;
+    }
 
     return result.toString();
   }
