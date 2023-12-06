@@ -48,20 +48,17 @@ async function createInputFiles() {
 
   createFileWithContentIfItDoesNotExist(
     path.join(inputDayPath, 'part1.txt'),
-    `{visit https://adventofcode.com/2023/day/${day} and paste the part 1 input here}`
+    `{visit https://adventofcode.com/2023/day/${day} and paste the part 1 input here}`,
   );
 
   createFileWithContentIfItDoesNotExist(
     path.join(inputDayPath, 'part2.txt'),
-    `{After completing day 1, visit https://adventofcode.com/2023/day/${day} and paste the part 2 input here}`
+    `{After completing day 1, visit https://adventofcode.com/2023/day/${day} and paste the part 2 input here, or delete this file to re-use the part 1 input}`,
   );
 }
 
 async function copyTemplate(from, to) {
-  const content = (await promises.readFile(from, { encoding: 'utf8' })).replace(
-    /0/g,
-    day
-  ); // dirty, I know 😅
+  const content = (await promises.readFile(from, { encoding: 'utf8' })).replace(/0/g, day); // dirty, I know 😅
   createFileWithContentIfItDoesNotExist(to, content);
 }
 
@@ -69,13 +66,10 @@ async function createCodeFiles() {
   const templateFolder = path.join(startPath, 'src', 'day0');
   const codeFolder = path.join(startPath, 'src', `day${day}`);
   await createDirectoryIfItDoesNotExist(codeFolder);
-  await copyTemplate(
-    path.join(templateFolder, 'index.ts'),
-    path.join(codeFolder, 'index.ts')
-  );
+  await copyTemplate(path.join(templateFolder, 'index.ts'), path.join(codeFolder, 'index.ts'));
   await copyTemplate(
     path.join(templateFolder, 'day0.spec.ts'),
-    path.join(codeFolder, `day${day}.spec.ts`)
+    path.join(codeFolder, `day${day}.spec.ts`),
   );
 }
 
@@ -85,12 +79,12 @@ async function updateIndex() {
     .replace(
       '// MORE IMPORTS HERE',
       `import day${day} from './day${day}/index';
-// MORE IMPORTS HERE`
+// MORE IMPORTS HERE`,
     )
     .replace(
       '// MORE DAYS HERE',
       `day${day},
-  // MORE DAYS HERE`
+  // MORE DAYS HERE`,
     );
 
   console.log('  Updating index');

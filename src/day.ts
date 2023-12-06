@@ -8,9 +8,7 @@ abstract class Day {
   }
 
   async partOne(): Promise<string> {
-    const content = await fs.promises.readFile(
-      `./inputs/day${this.id}/part1.txt`
-    );
+    const content = await fs.promises.readFile(`./inputs/day${this.id}/part1.txt`);
     const result = this.solveForPartOne(content.toString());
     return result;
   }
@@ -18,9 +16,16 @@ abstract class Day {
   abstract solveForPartOne(input: string): string;
 
   async partTwo(): Promise<string> {
-    const content = await fs.promises.readFile(
-      `./inputs/day${this.id}/part2.txt`
-    );
+    let content: Buffer | undefined;
+    try {
+      content = await fs.promises.readFile(`./inputs/day${this.id}/part2.txt`);
+    } catch (error: any) {
+      if ((error.code = 'ENOENT')) {
+        content = await fs.promises.readFile(`./inputs/day${this.id}/part1.txt`);
+      } else {
+        throw error;
+      }
+    }
     const result = this.solveForPartTwo(content.toString());
     return result;
   }
