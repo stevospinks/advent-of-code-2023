@@ -52,7 +52,30 @@ class Day6 extends Day {
   }
 
   solveForPartTwo(input: string): string {
-    return input;
+    const data = StringParser.ToStringArray(input).map((l) => l.split(':')[1]);
+    const raceTime: number = parseInt(data[0].replace(/ /g, ''));
+    const raceDistance: number = parseInt(data[1].replace(/ /g, ''));
+
+    let firstWinAt = -1;
+    let time = -1;
+    while (firstWinAt === -1 && time <= raceTime) {
+      time++;
+      if (this.canBeatRecord(time, raceTime, raceDistance)) {
+        firstWinAt = time;
+      }
+    }
+
+    let lastWinAt = -1;
+    time = raceTime + 1;
+    while (lastWinAt === -1 && time >= 0) {
+      time--;
+      if (this.canBeatRecord(time, raceTime, raceDistance)) {
+        lastWinAt = time;
+      }
+    }
+
+    const result = lastWinAt - (firstWinAt - 1);
+    return result.toString();
   }
 }
 
