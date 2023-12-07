@@ -1,1 +1,0 @@
-{After completing day 1, visit https://adventofcode.com/2023/day/7 and paste the part 2 input here, or delete this file to re-use the part 1 input}

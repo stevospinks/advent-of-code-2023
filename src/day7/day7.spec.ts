@@ -11,7 +11,7 @@ describe('On Day 7', () => {
     expect(day7.solveForPartOne(example)).toBe('6440');
   });
 
-  xit(`part 2 solves for the example input`, () => {
-    expect(day7.solveForPartTwo(example)).toBe('hello');
+  it(`part 2 solves for the example input`, () => {
+    expect(day7.solveForPartTwo(example)).toBe('5905');
   });
 });
